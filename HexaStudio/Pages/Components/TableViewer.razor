@@ -1,0 +1,83 @@
+﻿@namespace HexaStudio.Pages.Components
+@using HexaStudio.API
+@using HexaStudio.API.Metadata
+@using HexaStudio.API.Plugins
+@using HexaStudio.Controller
+@inject IJSRuntime jsRuntime
+
+
+@if (editTable != null)
+{
+    <TableEntryEditor onClose="() => {editTable = null; StateHasChanged(); }" table="editTable"/>
+}
+
+<div class="box">
+    <div class="nav">
+        <h1>Table @table.displayName</h1>
+        <div @onclick="() => onClose()">
+            <RoundIcon type="fa-times"/>
+        </div>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>
+                    LogicalName
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    TypeValue
+                </th>
+                <th>
+                    Attributes
+                </th>
+            </tr>
+            @if (information != null)
+            {
+                @foreach (SchemaColumn column in information.schema.columns)
+                {
+                    <tr>
+                        <td>@column.logicalName</td>
+                        <td>@column.type.displayName</td>
+                        <td>@column.type.displayValue</td>
+                        <td>@(Convert.ToString(@column.attributes, 2).PadLeft(8, '0'))</td>
+                    </tr>
+                }
+            }
+        </table>
+        <button @onclick="() => {editTable = information; StateHasChanged();}">
+            Add Entry
+        </button>
+    </div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public TableInformation table { get; set; }
+
+    [Parameter]
+    public Action onClose { get; set; }
+
+    private DetailedTableInformation information;
+    private DetailedTableInformation editTable = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+        InformationRequest req = new InformationRequest(Method.FETCH);
+        req.action = InformationRequestAction.TABLE;
+        req.table = table.logicalName;
+
+        Response<InformationTableResponse> res = await req.SendRequest<InformationTableResponse>();
+        if (res.containsError)
+        {
+            API.DisplayError(res.errorMessage);
+            return;
+        }
+
+        information = res.data.table;
+    }
+}

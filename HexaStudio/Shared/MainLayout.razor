@@ -1,0 +1,25 @@
+﻿@using HexaStudio.API
+@using HexaStudio.Controller
+@using HexaStudio.Pages.Components
+@inherits LayoutComponentBase
+@inject HttpClient http
+
+<HeadContent>
+    <link rel="icon" type="image/png" href="@(Request.DOMAIN + "resource/giwa4kju27znvqf")">
+</HeadContent>
+
+<ErrorModal @ref="errorModal"/>
+<div class="page">
+    @Body
+</div>
+
+@code
+{
+    private ErrorModal errorModal;
+
+    protected override void OnInitialized()
+    {
+        API.receiver = () => errorModal;
+        Request.client = http;
+    }
+}

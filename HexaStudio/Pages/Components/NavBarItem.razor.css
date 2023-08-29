@@ -1,0 +1,15 @@
+﻿a {
+    text-decoration: none;
+    transition: 0.3s;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: inherit !important;
+}
+
+a.space {
+    margin-left: 40px;
+}
+
+a:hover {
+    text-decoration: underline;
+}

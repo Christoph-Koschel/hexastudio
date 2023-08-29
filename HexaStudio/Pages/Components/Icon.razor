@@ -1,0 +1,16 @@
+﻿@namespace HexaStudio.Pages.Components
+
+<i class="@group @type" style="font-size: @size"></i>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public string type { get; set; }
+
+    [Parameter]
+    public string group { get; set; } = "far";
+
+    [Parameter]
+    public string size { get; set; } = "25px";
+
+}

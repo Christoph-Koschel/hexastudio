@@ -1,0 +1,42 @@
+﻿@namespace HexaStudio.Pages.Components
+@using HexaStudio.Controller
+@using HexaStudio.API.Plugins
+@using HexaStudio.API
+@using HexaStudio.API.Metadata
+@inject HttpClient http
+@inject IJSRuntime jsRuntime
+
+<div id="projects" class="section">
+    <div class="content">
+        <p>Projects</p>
+        <h2>What I've Built</h2>
+        <div>
+            @foreach (ProjectData project in projects)
+            {
+                <ProjectItem
+                    title="@project.name"
+                    imgUrl="@project.banner.url"
+                    link="@project.page.url"
+                    mostTool="@(project.primaryLanguage.displayName)"/>
+            }
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private ProjectData[] projects = Array.Empty<ProjectData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+        ProjectsRequest req = new ProjectsRequest(Method.FETCH);
+        Response<ProjectsFetchResponse> res = await req.SendRequest<ProjectsFetchResponse>();
+        if (res.status != Status.OK)
+        {
+            API.DisplayError(res.errorMessage);
+            return;
+        }
+        projects = res.data.projects;
+    }
+}

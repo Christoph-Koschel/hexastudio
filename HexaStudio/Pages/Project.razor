@@ -1,0 +1,147 @@
+﻿@page "/projects/{project}"
+@using System.Text
+@using HexaStudio.API
+@using HexaStudio.API.Plugins
+@using HexaStudio.Controller
+@using HexaStudio.Pages.Components
+@using HexaStudio.API.Metadata
+@using HexaStudio.Markdown
+@inject NavigationManager navman
+@inject IJSRuntime jsRuntime
+
+<HeadContent>
+    <style>
+        @(Embedded.ReadMarkdown())
+    </style>
+</HeadContent>
+
+<NavBar external="true" staysFixed="true" transparent="true"/>
+<div class="banner">
+    <div>
+    </div>
+    @if (detailedProjectData != null)
+    {
+        <span class="img-wrapper">
+            <img src="@detailedProjectData.banner.url" decoding="async"/>
+        </span>
+        <div class="header">
+            <h2>@detailedProjectData.name</h2>
+            <h3>@detailedProjectData.primaryLanguage.displayName</h3>
+        </div>
+    }
+
+</div>
+<div class="description">
+    <span>Project</span>
+    <div class="markdown">
+        @((MarkupString)description)
+    </div>
+    <div class="splitter">
+        @if (detailedProjectData != null)
+        {
+            <SharedBar details="languages"></SharedBar>
+        }
+    </div>
+    <div class="details">
+        <div class="toolbox">
+            <h2>Toolbox</h2>
+            <ul>
+                @foreach (Language framework in frameworks)
+                {
+                    <li>
+                        <div>
+                            <Icon type="fa-dot-circle" group="fad" size="15px"></Icon>
+                        </div>
+                        <span>@framework.displayName</span>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="languages">
+            <h2>Languages</h2>
+            <ul>
+                @foreach (Detail language in languages)
+                {
+                    <li>
+                        <div>
+                            <Icon type="fa-dot-circle" group="fad" size="15px"></Icon>
+                        </div>
+                        <span>@language.language.displayName</span>
+                        <span>@language.percentage%</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="actions">
+        <div @onclick='() => View.Open(detailedProjectData.github)'>
+            <RoundIcon type="fa-github" group="fab"/>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public string project { get; set; }
+
+    private string description;
+    private DetailedProjectData detailedProjectData;
+    private Language[] frameworks = Array.Empty<Language>();
+    private Detail[] languages = Array.Empty<Detail>();
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+        ProjectsRequest req = new ProjectsRequest(Method.FETCH);
+        req.action = ProjectsRequestAction.EXISTS;
+        req.project = project;
+        Response<ProjectExistsResponse> res = await req.SendRequest<ProjectExistsResponse>();
+        if (res.containsError)
+        {
+            API.DisplayError(res.errorMessage);
+            return;
+        }
+
+        if (!res.data.exists)
+        {
+            navman.NavigateTo("404");
+        }
+
+        FetchProject();
+    }
+
+    private async void FetchProject()
+    {
+        ProjectsRequest req = new ProjectsRequest(Method.FETCH);
+        req.action = ProjectsRequestAction.FETCH;
+        req.project = project;
+        Response<ProjectFetchResponse> res = await req.SendRequest<ProjectFetchResponse>();
+        if (res.containsError)
+        {
+            API.DisplayError(res.errorMessage);
+            return;
+        }
+
+        detailedProjectData = res.data.project;
+        frameworks = detailedProjectData.details
+            .Select(detail => detail.language)
+            .Where(lang => !lang.language)
+            .ToArray();
+        languages = detailedProjectData.details
+            .Where(detail => detail.language.language)
+            .ToArray();
+
+        StateHasChanged();
+        FetchDescription();
+    }
+
+    private async void FetchDescription()
+    {
+        string markdown = Encoding.UTF8.GetString(await detailedProjectData.description.Fetch());
+        MarkdownConverter converter = new MarkdownConverter(markdown);
+        description = converter.ToHtml();
+        StateHasChanged();
+    }
+}

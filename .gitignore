@@ -1,0 +1,20 @@
+# Project files
+.idea
+.vs
+
+# C#
+bin
+obj
+
+# NodeJS
+node_modules
+
+# Special folders & files
+dist
+out
+*.log
+
+HexaStudio.sln.DotSettings.user
+
+HexaStudio/wwwroot/webfonts
+HexaStudio/wwwroot/css/all.min.css

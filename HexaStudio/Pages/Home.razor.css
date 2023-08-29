@@ -1,0 +1,26 @@
+﻿.tables {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: #000 0 0 0 0, #000 0 0 0 0, rgb(156, 163, 175) 0 20px 25px -5px, rgb(156, 163, 175) 0 8px 10px -6px;
+}
+
+.tables table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tables table th {
+    padding: 0.4rem 0.2rem;
+    text-align: left;
+}
+
+.tables table td {
+    padding: 0.4rem 0.2rem;
+    transition: 0.3s;
+}
+
+
+.tables table tr:hover td {
+    background: rgba(0, 0, 0, 0.1);
+}

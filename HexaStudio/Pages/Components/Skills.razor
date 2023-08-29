@@ -1,0 +1,38 @@
+﻿@namespace HexaStudio.Pages.Components
+@using HexaStudio.API.Plugins
+@using HexaStudio.API
+@using HexaStudio.Controller
+@inject HttpClient http
+@inject IJSRuntime jsRuntime
+
+<div id="skills" class="section">
+    <div class="content">
+        <p>Skills</p>
+        <h2>What I Can Do</h2>
+        <div>
+            @foreach (SkillData skill in skills)
+            {
+                <SkillItem href="@skill.url" title="@skill.name"/>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private SkillData[] skills = Array.Empty<SkillData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+        SkillsRequest req = new SkillsRequest(Method.FETCH);
+        Response<SkillsResponse> res = await req.SendRequest<SkillsResponse>();
+        if (res.status != Status.OK)
+        {
+            API.DisplayError(res.errorMessage);
+            return;
+        }
+
+        skills = res.data.GetSkills();
+    }
+}

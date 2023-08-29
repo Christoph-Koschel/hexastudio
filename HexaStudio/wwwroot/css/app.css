@@ -1,0 +1,105 @@
+* {
+    user-select: none;
+    -webkit-user-drag: none;
+    color: rgb(31, 41, 55) !important;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+
+html, body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    background: #ECF0F3;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    max-width: 1240px;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    padding: 16rem 0.5rem;
+}
+
+.section.bottom {
+    height: auto;
+    padding-bottom: 2rem;
+}
+
+div.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999999;
+}
+
+p {
+    color: rgb(75 85 99);
+    margin: 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: middle;
+    border: inherit;
+    border-radius: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-weight: 700;
+}
+
+h1:focus, h2:focus, h3:focus, h4:focus, h5:focus, h6:focus {
+    outline: none;
+}
+
+h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+input, textarea, button {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    display: flex;
+    border: 2px solid rgb(209 213 219);
+}
+
+button, input[type="submit"], input[type="button"], input[type="reset"] {
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    cursor: pointer;
+    justify-content: center;
+}
+
+@media (min-width: 640px) {
+    h2 {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .section {
+        padding: 0.5rem;
+        height: 100vh;
+    }
+
+    .section.top {
+        height: calc(100vh - 80px);
+    }
+}

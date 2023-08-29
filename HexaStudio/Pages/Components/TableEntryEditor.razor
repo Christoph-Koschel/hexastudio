@@ -1,0 +1,77 @@
+﻿@namespace HexaStudio.Pages.Components
+
+@using HexaStudio.API
+@using HexaStudio.API.Metadata
+@using HexaStudio.API.Plugins
+@using HexaStudio.Controller
+
+@inject IJSRuntime jsRuntime;
+
+<div class="modal">
+    <div class="box">
+        <div class="nav">
+            <h1>Table @table.displayName</h1>
+            <div @onclick="() => onClose()">
+                <RoundIcon type="fa-times"/>
+            </div>
+        </div>
+        <div class="scroll">
+            @for (int nameCount = 0; nameCount < table.schema.columns.Length; nameCount++)
+            {
+                SchemaColumn column = table.schema.columns[nameCount];
+                if ((column.attributes & SchemaColumn.SCHEMA_AUTO_INCREMENT) != SchemaColumn.SCHEMA_AUTO_INCREMENT)
+                {
+                    <TableEntryEditorInput type="@column" name="@("input" + nameCount)" table="@table.logicalName" onRender="input => inputs.Add(input)"/>
+                }
+            }
+            <button @onclick="SubmitForm">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public Action onClose { get; set; }
+
+    [Parameter, EditorRequired]
+    public DetailedTableInformation table { get; set; }
+
+    private List<TableEntryEditorInput> inputs = new List<TableEntryEditorInput>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+    }
+
+    private async Task SubmitForm()
+    {
+        InformationRequest req = new InformationRequest(Method.INSERT);
+        req.action = InformationRequestAction.CREATE_ROW;
+        req.table = table.logicalName;
+        TableEntryEditorInput[] inputs = this.inputs.ToArray();
+        foreach (TableEntryEditorInput input in inputs)
+        {
+            req.columns.Add(input.type.logicalName);
+            if (input.type.type.logicalName is ColumnType.BLOB or ColumnType.MEDIUM_BLOB)
+            {
+                req.files[input.type.logicalName] = input.file.OpenReadStream(input.file.Size);
+            }
+            else
+            {
+                req.attributes[input.type.logicalName] = await input.GetValue();
+            }
+        }
+
+        Response<InformationCreateRowResponse> res = await req.SendRequest<InformationCreateRowResponse>();
+        if (res.containsError)
+        {
+            API.DisplayError(res.errorMessage);
+            return;
+        }
+
+        onClose();
+    }
+}

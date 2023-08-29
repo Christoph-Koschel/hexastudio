@@ -1,0 +1,32 @@
+﻿span:not(h1 span) {
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: rgb(75 85 99);
+}
+
+h1 {
+    padding: 1rem 0;
+    color: rgb(75 85 99) !important;
+    margin: 0;
+    font-size: 3.75rem;
+    font-weight: 700;
+}
+
+h1 span {
+    color: #5651E5 !important;
+}
+
+p {
+    max-width: 70%;
+    margin: 0 auto;
+    padding: 1rem 0;
+}
+
+div.icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 330px;
+    padding: 1rem 0;
+    width: 100%;
+}

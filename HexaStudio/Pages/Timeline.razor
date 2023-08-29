@@ -1,0 +1,173 @@
+﻿@page "/timeline"
+@using HexaStudio.Pages.Components
+@using HexaStudio.API.Plugins
+@using HexaStudio.API
+@using HexaStudio.API.Metadata.GitHub
+@using HexaStudio.Controller
+@inject IJSRuntime jsRuntime
+
+<NavBar staysFixed="true" external="true"/>
+<div class="background">
+
+</div>
+<div class="ui">
+    <div class="timeline-map" style="grid-template-columns: @(string.Concat(Enumerable.Repeat(" 1fr", columns)))">
+        @foreach (string name in FilterRepositoryNames())
+        {
+            <div class="item header">
+                <h2>@name.Split('/')[1]</h2>
+                <div class="circle shadow top">
+                    <div>
+                    </div>
+                </div>
+                <div class="track shadow">
+
+                </div>
+            </div>
+        }
+        @foreach (DateTime date in FilterRepositoryDates())
+        {
+            @foreach (string repository in FilterRepositoryNames())
+            {
+                GetCommitOnDate(date, repository);
+                <div class="item">
+
+
+                    <div class="first track @(data.Length == 0 ? "empty" : "") @(endedRepositories.Contains(repository) || !beganRepositories.Contains(repository) ? "shadow" : "")">
+                    </div>
+                    @if (data.Length != 0 && !beganRepositories.Contains(repository))
+                    {
+                        <div class="circle top">
+                            <div></div>
+                        </div>
+                        <div class="track">
+                        </div>
+                    }
+
+                    @foreach (Commit commit in data)
+                    {
+                        beganRepositories.Add(repository);
+                        <div class="timeline-box">
+                            <p>
+                                @commit.message
+                            </p>
+                            <div>
+                                <span>@commit.author</span>
+                                <span>@commit.date.ToShortDateString()</span>
+                            </div>
+                        </div>
+                        <div class="track">
+                        </div>
+                    }
+
+                    @if (!endedRepositories.Contains(repository) && !MoreCommitsExists(date, repository))
+                    {
+                        endedRepositories.Add(repository);
+                        <div class="circle">
+                            <div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        @for (int i = 0; i < columns; i++)
+        {
+            <div class="item">
+                <div class="track first shadow">
+
+                </div>
+                <div class="circle shadow">
+                    <div></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private readonly HashSet<string> endedRepositories = new HashSet<string>();
+    private readonly HashSet<string> beganRepositories = new HashSet<string>();
+    private int columns;
+    private Commit[] data;
+
+    private static Commit[] commits = Array.Empty<Commit>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+        GitHubCommitsFetchRequest req = new GitHubCommitsFetchRequest(Method.FETCH);
+
+        Response<GitHubCommitsFetchResponse> res = await req.SendRequest<GitHubCommitsFetchResponse>();
+        if (res.containsError)
+        {
+            API.DisplayError(res.errorMessage);
+            return;
+        }
+
+        commits = res.data.commits;
+        columns = FilterRepositoryNames().Length;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Task.Delay(1000);
+        View.ResizeTracks();
+        View.InitMapDragging();
+    }
+
+    private string[] FilterRepositoryNames()
+    {
+        return FilterRepositoryNamesInternal().OrderBy(str => str).ToArray();
+    }
+
+    private IEnumerable<string> FilterRepositoryNamesInternal()
+    {
+        HashSet<string> seenRepositories = new HashSet<string>();
+        foreach (Commit commit in commits)
+        {
+            if (seenRepositories.Contains(commit.repo))
+            {
+                continue;
+            }
+
+            yield return commit.repo;
+
+            seenRepositories.Add(commit.repo);
+        }
+    }
+
+    private DateTime[] FilterRepositoryDates()
+    {
+        return commits.Select(commit => commit.date).OrderByDescending(date => date).Distinct().ToArray();
+    }
+
+    private void GetCommitOnDate(DateTime date, string repository)
+    {
+        data = GetCommitOnDateInternal(date, repository).ToArray();
+    }
+
+    private IEnumerable<Commit> GetCommitOnDateInternal(DateTime date, string repository)
+    {
+        foreach (Commit commit in commits)
+        {
+            if (commit.repo == repository && commit.date.CompareTo(date) == 0)
+            {
+                yield return commit;
+            }
+        }
+    }
+
+    private bool MoreCommitsExists(DateTime date, string repository)
+    {
+        foreach (Commit commit in commits)
+        {
+            if (commit.repo == repository && commit.date.CompareTo(date) < 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

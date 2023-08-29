@@ -1,0 +1,13 @@
+﻿@namespace HexaStudio.Pages.Components
+
+<div class="bar">
+    <div style="width: @percentage%; background: @color"></div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public double percentage { get; set; }
+    [Parameter, EditorRequired]
+    public string color { get; set; }
+}

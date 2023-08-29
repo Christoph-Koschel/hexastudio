@@ -1,0 +1,22 @@
+﻿@namespace HexaStudio.Pages.Components
+@using System.Globalization
+@using HexaStudio.API.Metadata
+
+<div class="bar">
+    @foreach (Detail detail in details)
+    {
+        <div style="width: @(Convert.ToString(detail.percentage, CultureInfo.InvariantCulture))%; background: @detail.language.color">
+            <div class="tooltip-wrapper">
+                <span class="tooltip-text">
+                    @detail.language.displayName
+                </span>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter, EditorRequired]
+    public Detail[] details { get; set; }
+}

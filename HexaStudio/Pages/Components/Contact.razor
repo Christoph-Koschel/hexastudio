@@ -1,0 +1,132 @@
+﻿@namespace HexaStudio.Pages.Components
+@using HexaStudio.Controller
+@inject IJSRuntime jsRuntime
+
+<div id="contact" class="section">
+    @if (showModal)
+    {
+        <div class="modal">
+            @if (showFailModal)
+            {
+                <div class="box">
+                    <p>
+                        We apologize, but it seems that there was an error in submitting your message.<br>
+                        Please try again later or contact us through our alternate channels.<br>
+                        I appreciate your interest and look forward to hearing from you soon.
+                    </p>
+                    <button @onclick="() => {showModal = false; showFailModal = false; StateHasChanged();}">
+                        Close
+                    </button>
+                </div>
+            }
+            @if (showSuccessModal)
+            {
+                <div class="box">
+                    <p>
+                        Thank you for reaching out to us.<br/><br/>
+                        We have received your message and will get back to you as soon as possible.<br/>
+                        Your feedback is important for me, and I appreciate you taking the time to contact us.
+                    </p>
+                    <button @onclick="() => {showModal = false; showSuccessModal = false; StateHasChanged();}">
+                        Close
+                    </button>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="content">
+        <p>Contact</p>
+        <h2>Get In Touch</h2>
+        <div>
+            <div class="information">
+                <div>
+                    @* <div> *@
+                        <div class="image">
+                            <Image name="home.images.contact"/>
+                        </div>
+                    @* </div> *@
+                    <div>
+                        <h2>Christoph Koschel</h2>
+                        <p>Software Engineer</p>
+                        <p>A student interested in computer science</p>
+                    </div>
+                    <div>
+                        <p>Connect With me</p>
+                        <div>
+                            <div @onclick='() => View.Open("https://github.com/Christoph-Koschel")'>
+                                <RoundIcon type="fa-github" group="fab"/>
+                            </div>
+                            <div @onclick='() => View.Open("mailto:christoph@hexa-studio.de", View.OpenType.TOP)'>
+                                <RoundIcon type="fa-envelope" group="fal"/>
+                            </div>
+                            <div>
+                                <RoundIcon type="fa-user" group="fas"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form">
+                <div>
+                    <form @onsubmit="ContactSubmit" id="contact-form">
+                        <div>
+                            <div>
+                                <label>Name</label>
+                                <input type="text" required/>
+                            </div>
+                            <div>
+                                <label>Phone number</label>
+                                <input type="tel" required/>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Email</label>
+                            <input type="email" required/>
+                        </div>
+                        <div>
+                            <label>Subject</label>
+                            <input type="text" required/>
+                        </div>
+                        <div>
+                            <label>Message</label>
+                            <textarea rows="10" required></textarea>
+                        </div>
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-up">
+            <div @onclick='() => View.ScrollTo("#home")'>
+                <RoundIcon type="fa-chevron-double-up"></RoundIcon>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool showModal;
+    private bool showSuccessModal;
+    private bool showFailModal;
+
+    protected override void OnInitialized()
+    {
+        View.Init(jsRuntime);
+    }
+
+    private async Task ContactSubmit()
+    {
+        if (await View.SubmitContactForm())
+        {
+            showModal = true;
+            showSuccessModal = true;
+            StateHasChanged();
+            return;
+        }
+
+        showModal = true;
+        showFailModal = true;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.9" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HexaStudio.API\HexaStudio.API.csproj" />
+    <ProjectReference Include="..\HexaStudio.Markdown\HexaStudio.Markdown.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\data\projects.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\data\skills.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\android.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\bootstrap.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\csharp.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\css.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\docker.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\electron.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\git.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\github.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\html.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\java.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\javascript.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\linux.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\mongo.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\mysql.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\node.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\php.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\sqlite.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\skills\typescript.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+  </ItemGroup>
+
+
+
+</Project>

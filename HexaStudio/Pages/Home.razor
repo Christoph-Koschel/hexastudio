@@ -1,0 +1,105 @@
+﻿@page "/admin/home"
+@using HexaStudio.Controller
+@using HexaStudio.API
+@using HexaStudio.API.Metadata
+@using HexaStudio.API.Plugins
+@using HexaStudio.Pages.Components
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navm
+
+
+<NavBar/>
+<div class="tables">
+    <table>
+        <tr>
+            <th>
+                DisplayName
+            </th>
+            <th>
+                LogicalName
+            </th>
+            <th>
+                Columns
+            </th>
+        </tr>
+        @foreach (TableInformation table in tables)
+        {
+            <tr @onclick="() => ClickTable(table)">
+                <td>
+                    @table.displayName
+                </td>
+                <td>
+                    @table.logicalName
+                </td>
+                <td>
+                    @table.columns
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@if (tableViewer != null)
+{
+    <div class="modal">
+        <TableViewer table="@tableViewer" onClose="TableViewerClose"/>
+    </div>
+}
+
+@* List plugins *@
+@* Account manager *@
+@* List tables *@
+
+@code {
+    private TableInformation[] tables = Array.Empty<TableInformation>();
+    private TableInformation tableViewer;
+
+    private static readonly string[] FILTER_LIST =
+    {
+        "account",
+        "registrations"
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+        AuthenticatorRequest req = new AuthenticatorRequest(Method.FETCH);
+        req.action = AuthenticatorRequestAction.VALIDATE;
+        Response<AuthenticatorValidResponse> res = await req.SendRequest<AuthenticatorValidResponse>();
+        if (res.containsError)
+        {
+            navm.NavigateTo("/");
+            return;
+        }
+
+        if (!res.data.valid)
+        {
+            navm.NavigateTo("/");
+        }
+
+        FetchTables();
+    }
+
+    private async void FetchTables()
+    {
+        InformationRequest req = new InformationRequest(Method.FETCH);
+        Response<InformationTablesResponse> res = await req.SendRequest<InformationTablesResponse>();
+        if (res.containsError)
+        {
+            API.DisplayError(res.errorMessage);
+        }
+
+        tables = res.data.tables.Where(table => !FILTER_LIST.Contains(table.logicalName)).OrderBy(table => table.displayName).ToArray();
+        StateHasChanged();
+    }
+
+    private void ClickTable(TableInformation table)
+    {
+        tableViewer = table;
+        StateHasChanged();
+    }
+    private void TableViewerClose()
+    {
+        tableViewer = null;
+        StateHasChanged();
+    }
+}

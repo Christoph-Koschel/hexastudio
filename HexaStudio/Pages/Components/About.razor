@@ -1,0 +1,44 @@
+﻿@namespace HexaStudio.Pages.Components
+@using System.Globalization
+@using HexaStudio.Controller
+@inject IJSRuntime jsRuntime
+
+<div id="about" class="section">
+    <div>
+        <div class="content">
+            <p>About</p>
+            <h2>Who I Am</h2>
+            <p class="code">// Im not your normal developer</p>
+            <p>
+                Hello, and welcome to my profile! My name is Christoph Koschel, and I'm excited to share a little bit about myself with you.
+            </p>
+            <p>
+                I am a @age-year-old student with a passion for informatics. I currently live in southern Germany. In my free time, I enjoy all things related to computers, from building websites to understanding how an operating system works, and even creating my own programming language. I also enjoy spending time with my family and friends, whether it's going to a party with them or just hanging out.
+            </p>
+            <p>
+                Thank you for taking the time to read a little bit about me. I'm looking forward to connecting with you!
+            </p>
+            <a @onclick='() => View.ScrollTo("#projects")'>Check out some of my latest projects.</a>
+        </div>
+        <div class="image">
+            <Image name="home.images.about"/>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        View.Init(jsRuntime);
+
+        DateTime birthdate = DateTime.ParseExact("2005-10-17", "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        DateTime currentDate = DateTime.Now;
+        age = currentDate.Year - birthdate.Year;
+        if (birthdate > currentDate.AddYears(-age))
+        {
+            age--;
+        }
+    }
+
+    private int age;
+}

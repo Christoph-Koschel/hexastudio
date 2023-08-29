@@ -1,0 +1,180 @@
+﻿.section .content {
+    max-width: 1240px;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.section .content > p {
+    color: #5651E5 !important;
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.section .content > h2 {
+    padding: 1rem 0;
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.section .content > div:first-of-type {
+    display: grid;
+    gap: 2rem;
+}
+
+.section .content > div .information {
+    grid-column: span 3/span 3;
+    width: 100%;
+    height: 100%;
+    box-shadow: #000 0 0 0 0, #000 0 0 0 0, rgb(156, 163, 175) 0 20px 25px -5px, rgb(156, 163, 175) 0 8px 10px -6px;
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.section .content > div .information > div {
+    height: 100%;
+}
+
+.section .content > div .information div.image {
+    border-radius: 0.75rem;
+    transition: 0.3s ease-in;
+}
+
+.section .content > div .information div.image:hover {
+    transform: scale(105%);
+}
+
+.section .content > div .information > div h2 {
+    padding: 0.5rem 0;
+    margin: 0;
+}
+
+.section .content > div .information > div p:last-child {
+    padding: 0.5rem 0;
+}
+
+.section .content > div .information div > div:last-child p {
+    padding-top: 2rem;;
+}
+
+.section .content > div .information div > div:last-child p {
+    text-transform: uppercase;
+}
+
+.section .content > div .information div > div:last-child div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+/**/
+/**/
+/**/
+
+.section .content > div .form {
+    grid-column: span 3/span 3;
+    width: 100%;
+    height: auto;
+    box-shadow: #000 0 0 0 0, #000 0 0 0 0, rgb(156, 163, 175) 0 20px 25px -5px, rgb(156, 163, 175) 0 8px 10px -6px;
+    border-radius: 0.75rem;
+}
+
+.section .content > div .form > div {
+    padding: 1rem;
+}
+
+.section .content > div .form form label {
+    text-transform: uppercase;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    padding: 0.5rem 0;
+}
+
+.section .content > div .form form > div:first-child {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.5rem 0;
+}
+
+.section .content > div .form form > div:first-child div {
+    display: flex;
+    flex-direction: column;
+}
+
+.section .content > div .form form > div:not(:first-child) {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0;
+}
+
+.section .content > div .form form > button {
+    width: 100%;
+    padding: 1rem;
+    color: rgb(243 244 246) !important;
+    margin-top: 1rem;
+    background-image: linear-gradient(to right, rgb(86, 81, 229), rgb(112, 157, 255));
+    border: none;
+    border-radius: 0.75rem;
+}
+
+/**/
+/**/
+/**/
+
+.section .content > div:last-child {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 0;
+}
+
+/**/
+/**/
+/**/
+
+.modal .box {
+    width: 80%;
+    max-width: 1024px;
+    padding: 1rem;
+    background: #ECF0F3;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .section .content > div .form form > div:first-child {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .section .content div {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .section .content div .information {
+        grid-column: span 2/span 2;
+    }
+
+    .section .content > div .information > div {
+        padding: 1rem;
+    }
+
+    /**/
+    /**/
+    /**/
+    .section .content > div .form {
+        padding: 1rem;
+    }
+
+
+}

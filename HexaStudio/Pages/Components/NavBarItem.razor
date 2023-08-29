@@ -1,0 +1,47 @@
+﻿@namespace HexaStudio.Pages.Components
+@using HexaStudio.Controller
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navm;
+
+<a @onclick='OnClick' class="@(space ? "space" : "")">
+    @text
+</a>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public bool external { get; set; }
+
+    [Parameter, EditorRequired]
+    public string text { get; set; }
+
+    [Parameter, EditorRequired]
+    public string target { get; set; }
+
+    [Parameter]
+    public bool space { get; set; } = true;
+
+    protected override void OnInitialized()
+    {
+        View.Init(jsRuntime);
+    }
+
+    private void OnClick()
+    {
+        if (external)
+        {
+            if (target.StartsWith("#"))
+            {
+                navm.NavigateTo("/" + target, true);
+            }
+            else
+            {
+                navm.NavigateTo(target);
+            }
+        }
+        else
+        {
+            View.ScrollTo(target);
+        }
+    }
+}

@@ -1,0 +1,38 @@
+﻿@namespace HexaStudio.Pages.Components
+
+@using HexaStudio.API
+@using HexaStudio.API.Plugins
+@using HexaStudio.Controller
+
+@inject IJSRuntime jsRuntime;
+
+@if (url != null)
+{
+    <img src="@url" alt="" decoding="async" loading="lazy" width="@width"/>
+}
+
+@code {
+
+    [Parameter, EditorRequired]
+    public string name { get; set; }
+
+    [Parameter]
+    public string width { get; set; } = "";
+
+    private string url;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+
+        ResourceRequest req = new ResourceRequest(Method.FETCH, name);
+        Response<ResourceResponse> res = await req.SendRequest<ResourceResponse>();
+        if (res.containsError)
+        {
+            return;
+        }
+
+        url = res.data.url;
+        StateHasChanged();
+    }
+}

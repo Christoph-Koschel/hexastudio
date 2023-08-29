@@ -1,0 +1,68 @@
+﻿.wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 100%;
+    padding: 1rem;
+    box-shadow: #000 0 0 0 0, #000 0 0 0 0, rgb(156, 163, 175) 0 20px 25px -5px, rgb(156, 163, 175) 0 8px 10px -6px;
+    border-radius: 0.25rem;
+}
+
+.wrapper img {
+    border-radius: 0.75rem;
+}
+
+.wrapper:hover img {
+    opacity: 10%;
+}
+
+.wrapper:hover {
+    background: linear-gradient(to right, #5651E5, #709DFF);
+}
+
+.wrapper .details {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wrapper:hover .details {
+    display: block;
+}
+
+.wrapper .details h3 {
+    color: #FFF !important;
+    letter-spacing: 0.1rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    text-align: center;
+}
+
+.wrapper .details > p {
+    padding-bottom: 1rem;
+    padding-top: 0.5rem;
+    color: #FFF !important;
+    text-align: center;
+}
+
+.wrapper .details a {
+    text-decoration: none !important;
+    color: rgb(55 65 81) !important;
+}
+
+.wrapper .details a p {
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.75rem;
+    background: #FFF;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: rgb(55 65 81) !important;
+}

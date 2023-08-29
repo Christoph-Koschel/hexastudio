@@ -1,0 +1,130 @@
+﻿.nav-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 4rem;
+    padding-left: 4rem;
+    width: 100%;
+    height: 80px;
+}
+
+.nav-bar.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+}
+
+.nav-bar.fixed:not(.transparent) {
+    background: #ECF0F3;
+    box-shadow: #000 0 0 0 0, #000 0 0 0 0, rgb(156, 163, 175) 0 20px 25px -5px, rgb(156, 163, 175) 0 8px 10px -6px;
+}
+
+.nav-bar .desktop, .nav-bar .mobile {
+    color: rgb(31, 41, 55) !important;
+}
+
+.nav-bar.transparent .desktop, .nav-bar.transparent .mobile {
+    color: #FFF !important;
+}
+
+
+/**/
+/**/
+/**/
+
+.nav-tab {
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: 1s all;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.nav-tab .content {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    transition: 1s all;
+    background: #ECF0F3;
+    height: 100%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.nav-tab.active .content.active {
+    left: 0;
+}
+
+.nav-tab .content .header > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-tab .content .header img {
+    width: 90px;
+}
+
+.nav-tab .content .header p {
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+}
+
+.nav-tab .content .header ul {
+    list-style: none;
+    margin: 20px 0 0 0;
+    padding: 0 0;
+}
+
+.nav-tab .content .header ul li {
+    padding: 16px 0;
+}
+
+.nav-tab .content .footer p {
+    text-transform: uppercase;
+    color: #5651E5 !important;
+    margin-bottom: 20px;
+
+}
+
+.nav-tab .content .footer > div {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+/**/
+/**/
+/**/
+
+.mobile {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .nav-tab .content {
+        width: 75%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .desktop {
+        display: none;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .nav-tab:not(.active) {
+        display: none;
+    }
+}

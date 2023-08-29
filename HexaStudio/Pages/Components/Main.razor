@@ -1,0 +1,29 @@
+﻿@namespace HexaStudio.Pages.Components
+@using HexaStudio.Controller
+@inject IJSRuntime jsRuntime
+
+<div id="home" class="section top">
+    <span>Let's build something together</span>
+    <h1>Hi, I'm <span>Christoph</span></h1>
+    <h1>A Software Engineer</h1>
+    <p>
+        I'm a software engineer specializing in building application for the background of a PC. Currently
+        I'm focused on create modular and easy extensible software while learning the ground thinks of the programming world (ASM)
+    </p>
+    <div class="icons">
+        <div @onclick='() => View.Open("https://github.com/Christoph-Koschel")'>
+            <RoundIcon type="fa-github" group="fab" />
+        </div>
+        <div @onclick='() => View.Open("mailto:christoph@hexa-studio.de", View.OpenType.TOP)'>
+            <RoundIcon type="fa-envelope" group="fal" />
+        </div>
+        <RoundIcon type="fa-user" group="fas" />
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        View.Init(jsRuntime);
+    }
+}

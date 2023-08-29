@@ -1,0 +1,139 @@
+﻿@namespace HexaStudio.Pages.Components
+@using HexaStudio.API.Metadata
+@using HexaStudio.Controller
+@using HexaStudio.API
+@using HexaStudio.API.Plugins
+
+@inject IJSRuntime jsRuntime;
+
+<div class="input">
+    <h3>@type.logicalName</h3>
+    <div>
+        <b>Type:</b>
+        <span>@type.type.displayName</span>
+    </div>
+    @if (type.type.logicalName is ColumnType.REF or ColumnType.GROUP)
+    {
+        <div>
+            <b>From/Of:</b>
+            <span>@type.type.displayValue</span>
+        </div>
+    }
+    @switch (type.type.logicalName)
+    {
+        case ColumnType.INT:
+            <input required name="@name" type="number"/>
+            break;
+        case ColumnType.FLOAT:
+        case ColumnType.DOUBLE:
+        case ColumnType.DECIMAL:
+            <input required/>
+            break;
+        case ColumnType.BOOL:
+            <div>
+                <input checked name="@name" type="radio" value="1"/>
+                <span>True</span>
+            </div>
+            <div>
+                <input type="radio" name="@name" value="0"/>
+                <span>False</span>
+            </div>
+            break;
+        case ColumnType.TEXT:
+            <input required name="@name" type="text"/>
+            break;
+        case ColumnType.BLOB:
+        case ColumnType.MEDIUM_BLOB:
+            <InputFile required OnChange="HandleFileChange"/>
+            break;
+        case ColumnType.TIMESTAMP:
+            <input required name="@name" type="date"/>
+            break;
+        case ColumnType.REF:
+            @if (options != null)
+            {
+                <input required name="@name" list="@(name + "List")"/>
+                <datalist id="@(name + "List")">
+                    @foreach (string option in options)
+                    {
+                        <option value="@option">
+                            @option
+                        </option>
+                    }
+                </datalist>
+            }
+            break;
+        case ColumnType.GROUP:
+            @if (options != null)
+            {
+                <input required name="@name" list="@(name + "List")"/>
+                <datalist id="@(name + "List")">
+                    @foreach (string option in options)
+                    {
+                        <option value="@option">
+                            @option
+                        </option>
+                    }
+                </datalist>
+            }
+            break;
+    }
+
+    <hr/>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public SchemaColumn type { get; set; }
+
+    [Parameter, EditorRequired]
+    public string table { get; set; }
+
+    [Parameter, EditorRequired]
+    public string name { get; set; }
+
+    [Parameter]
+    public Action<TableEntryEditorInput> onRender { get; set; }
+
+    private string[] options;
+    public IBrowserFile file { get; private set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+
+        if (type.type.logicalName is ColumnType.REF or ColumnType.GROUP)
+        {
+            InformationRequest req = new InformationRequest(Method.FETCH);
+            req.action = InformationRequestAction.ACCESS_KEY;
+            req.table = type.type.displayValue;
+
+            Response<InformationAccessKeyResponse> res = await req.SendRequest<InformationAccessKeyResponse>();
+            if (res.containsError)
+            {
+                API.DisplayError(res.errorMessage);
+                return;
+            }
+
+            options = res.data.values;
+        }
+        onRender(this);
+    }
+
+    public async Task<string> GetValue()
+    {
+        if (type.type.logicalName is ColumnType.BLOB or ColumnType.MEDIUM_BLOB)
+        {
+            return string.Empty;
+        }
+
+
+        return await View.GetValue(name);
+    }
+
+    private void HandleFileChange(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+    }
+}

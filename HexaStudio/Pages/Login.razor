@@ -1,0 +1,47 @@
+﻿@page "/admin/login"
+@using HexaStudio.Pages.Components
+@using HexaStudio.Controller
+@using HexaStudio.API.Plugins
+@using HexaStudio.API
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navm
+
+<NavBar external="true"/>
+
+<div class="wrapper">
+    <form class="box" @onsubmit="TryLogin">
+        <h2>Login</h2>
+        <input required type="text" placeholder="Username" @bind="username"/>
+        <input required type="password" placeholder="Password" @bind="password"/>
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+@code {
+    private string username;
+    private string password;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Request.authenticator ??= await API.Init(jsRuntime);
+        View.Init(jsRuntime);
+    }
+
+    private async void TryLogin()
+    {
+        AuthenticatorRequest req = new AuthenticatorRequest(Method.FETCH);
+        req.username = username;
+        req.password = password;
+
+        Response<AuthenticatorLoginResponse> res = await req.SendRequest<AuthenticatorLoginResponse>();
+        if (res.containsError)
+        {
+            API.DisplayError(res.errorMessage);
+            return;
+        }
+
+        View.StoreAuthenticator(new Authenticator(res.data.token, req.username));
+        navm.NavigateTo("/admin/home");
+
+    }
+}

@@ -1,0 +1,15 @@
+﻿@namespace HexaStudio.Pages.Components
+
+<div>
+    <Icon type="@type" group="@group"/>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public string type { get; set; }
+
+    [Parameter]
+    public string group { get; set; } = "far";
+    
+}

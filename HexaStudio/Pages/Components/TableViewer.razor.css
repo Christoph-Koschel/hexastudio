@@ -1,0 +1,22 @@
+﻿.box {
+    width: 80%;
+    max-width: 1024px;
+    padding: 1rem;
+    background: #ECF0F3;
+    border-radius: 0.75rem;
+}
+
+.box .nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.box table {
+    width: 100%;
+}
+
+.box th {
+    text-align: left;
+}

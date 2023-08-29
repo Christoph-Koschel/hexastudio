@@ -1,0 +1,40 @@
+﻿@namespace HexaStudio.Pages.Components
+
+@if (showModal)
+{
+    <div class="error-modal modal">
+        <div>
+            <div>
+                <h2>HexaStudioAPI - ERROR</h2>
+            </div>
+            <div>
+                <p>@message</p>
+                <button @onclick="CloseModal">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool showModalInternal;
+
+    [Parameter]
+    public bool showModal
+    {
+        get => showModalInternal;
+        set
+        {
+            showModalInternal = value;
+            StateHasChanged();
+        }
+    }
+
+    [Parameter]
+    public string message { get; set; } = "";
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+
+}

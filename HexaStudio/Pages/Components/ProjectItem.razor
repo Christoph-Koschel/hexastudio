@@ -1,0 +1,29 @@
+﻿@namespace HexaStudio.Pages.Components
+
+<div class="wrapper">
+    <img src="@imgUrl" alt="" decoding="async"/>
+
+    <div class="details">
+        <h3>@title</h3>
+        <p>@mostTool</p>
+        <a href="@link">
+            <p>More Info</p>
+        </a>
+    </div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public string imgUrl { get; set; }
+
+    [Parameter, EditorRequired]
+    public string title { get; set; }
+
+    [Parameter, EditorRequired]
+    public string mostTool { get; set; }
+
+    [Parameter, EditorRequired]
+    public string link { get; set; }
+
+}

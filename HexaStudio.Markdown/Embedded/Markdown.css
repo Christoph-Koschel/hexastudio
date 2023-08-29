@@ -1,0 +1,30 @@
+﻿.markdown {
+
+}
+
+.markdown p {
+    padding: 0.75rem 0;
+}
+
+.markdown h1, .markdown h2, .markdown h3 {
+    margin: 0 !important;
+}
+
+.markdown pre {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    overflow: auto;
+}
+
+.markdown code {
+    font-family: 'Courier New', monospace;
+}
+
+ul, ol {
+    margin-left: 20px;
+}
+
+li {
+    margin-bottom: 5px;
+}

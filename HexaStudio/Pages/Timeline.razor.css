@@ -1,0 +1,132 @@
+﻿.ui {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #e6e6e6;
+    z-index: 0;
+}
+
+.timeline-map {
+    --column-width: 400px;
+    background: #ECF0F3;
+    box-shadow: #000 0 0 0 0, #000 0 0 0 0, rgb(156, 163, 175) 0 20px 25px -5px, rgb(156, 163, 175) 0 8px 10px -6px;
+    padding: 2rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    gap: 0 1rem;
+}
+
+.timeline-map, .timeline-map * {
+    cursor: move;
+}
+
+.timeline-map .item {
+    height: 100%;
+}
+
+.timeline-map .item.header {
+    text-align: center;
+    width: var(--column-width);
+}
+
+.timeline-map .timeline-box {
+    box-shadow: #000 0 0 0 0, #000 0 0 0 0, rgb(156, 163, 175) 0 20px 25px -5px, rgb(156, 163, 175) 0 8px 10px -6px;
+    border-radius: 0.75rem;
+    margin: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    max-width: var(--column-width);
+    background: #ECF0F3;
+    transition: 0.3s;
+}
+
+.timeline-map .timeline-box:hover {
+    transform: scale(105%);
+}
+
+.timeline-map .timeline-box > p {
+    text-align: start;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.timeline-map .timeline-box > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.timeline-map .timeline-box > div > span:first-child {
+    font-weight: 700;
+}
+
+.timeline-map .track:not(.shadow) {
+    margin: auto;
+    width: 10px;
+    background: #5651E5;
+}
+
+.timeline-map .track.shadow {
+    width: 4px;
+    margin: auto;
+    border-left: 2px dashed #CCC;
+    border-right: 2px dashed #CCC;
+}
+
+.timeline-map .track:not(.empty) {
+    height: 50px;
+}
+
+.timeline-map .track.empty {
+    height: 100%;
+}
+
+.timeline-map .circle {
+    border-radius: 50%;
+    display: flex;
+    margin: auto;
+    transform: translateY(2px);
+}
+
+.timeline-map .circle:not(.shadow) {
+    width: 30px;
+    height: 30px;
+    background: #5651E5;
+}
+
+.timeline-map .circle.shadow {
+    width: 30px;
+    height: 30px;
+    border: 4px dashed #CCC;
+}
+
+.timeline-map .circle:not(.top) {
+    transform: translateY(-2px);
+}
+
+.timeline-map .circle > div {
+    width: 15px;
+    height: 15px;
+    margin: auto;
+    border-radius: 50%;
+}
+
+.timeline-map .circle:not(.shadow) > div {
+    background: white;
+}

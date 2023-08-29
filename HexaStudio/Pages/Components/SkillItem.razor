@@ -1,0 +1,22 @@
+﻿@namespace HexaStudio.Pages.Components
+
+<div class="content">
+    <div class="grid">
+        <div class="img">
+            <img width="64" height="64" decoding="async" loading="lazy" src="@href" alt=""/>
+        </div>
+        <div class="title">
+            <h3>@title</h3>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public string title { get; set; }
+
+    [Parameter, EditorRequired]
+    public string href { get; set; }
+
+}

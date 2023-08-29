@@ -1,0 +1,106 @@
+﻿@namespace HexaStudio.Pages.Components
+@using HexaStudio.Controller
+@inject IJSRuntime jsRuntime
+
+<div class="p-3 nav-bar @(staysFixed ? "fixed stays" : "") @(transparent ? "transparent" : "")">
+    <Image name="navbar.logo" width="140"/>
+    <div class="desktop">
+        <NavBarItem external="@external" target="#home" text="Home"/>
+        <NavBarItem external="@external" target="#about" text="About"/>
+        <NavBarItem external="@external" target="#skills" text="Skills"/>
+        <NavBarItem external="@external" target="#projects" text="Projects"/>
+        <NavBarItem external="@external" target="#contact" text="Contact"/>
+        <NavBarItem external="true" target="/timeline" text="Timeline"/>
+    </div>
+    <div class="mobile" @onclick="OpenNavMenu">
+        <Icon type="fa-bars"/>
+    </div>
+</div>
+<div class="nav-tab mobile @(wrapperOpen ? "active" : "") ">
+    <div class="content @(menuOpen ? "active" : "")">
+        <div class="header">
+            <div>
+                    <Image name="navbar.logo" width="90"/>
+                <div @onclick="CloseNavMenu">
+                    <RoundIcon type="fa-times"/>
+                </div>
+            </div>
+            <p>
+                Lets build something legendary together
+            </p>
+            <hr/>
+            <ul>
+                <li @onclick="CloseNavMenu">
+                    <NavBarItem external="@external" space="false" target="#home" text="Home"/>
+                </li>
+                <li @onclick="CloseNavMenu">
+                    <NavBarItem external="@external" space="false" target="#about" text="About"/>
+                </li>
+                <li @onclick="CloseNavMenu">
+                    <NavBarItem external="@external" space="false" target="#skills" text="Skills"/>
+                </li>
+                <li @onclick="CloseNavMenu">
+                    <NavBarItem external="@external" space="false" target="#projects" text="Projects"/>
+                </li>
+                <li @onclick="CloseNavMenu">
+                    <NavBarItem external="@external" space="false" target="#contact" text="Contact"/>
+                </li>
+                <li @onclick="CloseNavMenu">
+                    <NavBarItem external="true" space="false" target="timeline" text="Timeline"/>
+                </li>
+            </ul>
+        </div>
+        <div class="footer">
+            <p>Let's connect</p>
+            <div>
+                <div @onclick='() => View.Open("https://github.com/Christoph-Koschel")'>
+                    <RoundIcon type="fa-github" group="fab"/>
+                </div>
+                <div @onclick='() => View.Open("mailto:christoph@hexa-studio.de", View.OpenType.TOP)'>
+                    <RoundIcon type="fa-envelope" group="fal"/>
+                </div>
+                <div>
+                    <RoundIcon type="fa-user" group="fas"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public bool external { get; set; } = false;
+
+    [Parameter]
+    public bool staysFixed { get; set; } = false;
+
+    [Parameter]
+    public bool transparent { get; set; } = false;
+
+    private bool wrapperOpen = false;
+    private bool menuOpen = false;
+
+    protected override void OnInitialized()
+    {
+        View.Init(jsRuntime);
+    }
+
+    private async void OpenNavMenu()
+    {
+        wrapperOpen = true;
+        StateHasChanged();
+        await Task.Delay(TimeSpan.FromMilliseconds(100));
+        menuOpen = true;
+        StateHasChanged();
+    }
+
+    private async void CloseNavMenu()
+    {
+        menuOpen = false;
+        StateHasChanged();
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+        wrapperOpen = false;
+        StateHasChanged();
+    }
+}
