@@ -1,0 +1,11 @@
+﻿RewriteEngine On
+RewriteBase /
+
+# Redirect API requests to api/index.php
+RewriteRule ^api/.*$ _api/index.php [L]
+
+# Rest of your Blazor routing rules
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
